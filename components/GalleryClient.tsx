@@ -39,35 +39,6 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
 
   return (
     <div className="w-1/2 relative overflow-hidden bg-white p-[10%]">
-      <style jsx>{`
-        .cursor-left::after {
-          content: '←';
-          position: fixed;
-          pointer-events: none;
-          font-family: 'ABC Arizona Mix', Arial, sans-serif;
-          font-size: 20px;
-          color: white;
-          background: rgba(0, 0, 0, 0.5);
-          padding: 4px 8px;
-          border-radius: 50%;
-          z-index: 9999;
-          transform: translate(-50%, -50%);
-        }
-        .cursor-right::after {
-          content: '→';
-          position: fixed;
-          pointer-events: none;
-          font-family: 'ABC Arizona Mix', Arial, sans-serif;
-          font-size: 20px;
-          color: white;
-          background: rgba(0, 0, 0, 0.5);
-          padding: 4px 8px;
-          border-radius: 50%;
-          z-index: 9999;
-          transform: translate(-50%, -50%);
-        }
-      `}</style>
-      
       {showNavigation && (
         <div className="absolute top-[25px] right-[25px] z-10">
           <span className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
@@ -77,13 +48,9 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
       )}
       
       <div 
-        className={`w-full h-full relative ${
-          hoverSide === 'left' ? 'cursor-left' : 
-          hoverSide === 'right' ? 'cursor-right' : ''
-        }`}
+        className="w-full h-full relative"
         onMouseLeave={() => setHoverSide(null)}
         onMouseMove={handleMouseMove}
-        style={{ cursor: showNavigation ? 'none' : 'default' }}
       >
         {currentImage && (
           <Image
@@ -96,16 +63,21 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
           />
         )}
         
-        {/* Invisible click areas */}
+        {/* Click areas with custom cursors */}
         {showNavigation && (
           <>
             <div 
               className="absolute left-0 top-0 w-1/2 h-full z-20"
+              style={{ 
+                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'><text x=\'10\' y=\'15\' text-anchor=\'middle\' font-family=\'Arial\' font-size=\'16\' fill=\'black\'>←</text></svg>") 10 10, auto'
+              }}
               onClick={() => handleClick('left')}
             />
             <div 
               className="absolute right-0 top-0 w-1/2 h-full z-20"
-              onClick={() => handleClick('right')}
+              style={{ 
+                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'><text x=\'10\' y=\'15\' text-anchor=\'middle\' font-family=\'Arial\' font-size=\'16\' fill=\'black\'>→</text></svg>") 10 10, auto'
+              }}
             />
           </>
         )}
