@@ -39,6 +39,35 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
 
   return (
     <div className="w-1/2 relative overflow-hidden bg-white p-[10%]">
+      <style jsx>{`
+        .cursor-left::after {
+          content: '←';
+          position: fixed;
+          pointer-events: none;
+          font-family: 'ABC Arizona Mix', Arial, sans-serif;
+          font-size: 20px;
+          color: white;
+          background: rgba(0, 0, 0, 0.5);
+          padding: 4px 8px;
+          border-radius: 50%;
+          z-index: 9999;
+          transform: translate(-50%, -50%);
+        }
+        .cursor-right::after {
+          content: '→';
+          position: fixed;
+          pointer-events: none;
+          font-family: 'ABC Arizona Mix', Arial, sans-serif;
+          font-size: 20px;
+          color: white;
+          background: rgba(0, 0, 0, 0.5);
+          padding: 4px 8px;
+          border-radius: 50%;
+          z-index: 9999;
+          transform: translate(-50%, -50%);
+        }
+      `}</style>
+      
       {showNavigation && (
         <div className="absolute top-[25px] right-[25px] z-10">
           <span className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
@@ -48,15 +77,13 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
       )}
       
       <div 
-        className="w-full h-full relative"
+        className={`w-full h-full relative ${
+          hoverSide === 'left' ? 'cursor-left' : 
+          hoverSide === 'right' ? 'cursor-right' : ''
+        }`}
         onMouseLeave={() => setHoverSide(null)}
         onMouseMove={handleMouseMove}
-        style={{
-          cursor: !showNavigation ? 'default' : 
-                  hoverSide === 'left' ? 'url("data:text/plain;charset=utf-8,←") 16 16, auto' :
-                  hoverSide === 'right' ? 'url("data:text/plain;charset=utf-8,→") 16 16, auto' :
-                  'default'
-        }}
+        style={{ cursor: showNavigation ? 'none' : 'default' }}
       >
         {currentImage && (
           <Image
