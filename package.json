@@ -13,8 +13,10 @@
     "@sanity/image-url": "^1.1.0",
     "autoprefixer": "^10.4.21",
     "next": "15.4.6",
+    "plaiceholder": "^3.0.0",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "sharp": "^0.34.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
