@@ -83,7 +83,7 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
       ))}
 
       {showNavigation && (
-        <div className="absolute top-[20px] right-[15px] z-10">
+        <div className="absolute top-[15px] right-[15px] z-10">
           <span className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
             {currentIndex + 1}/{images.length}
           </span>

@@ -54,7 +54,7 @@ export default async function Home() {
   return (
     <div className="h-screen flex bg-white overflow-hidden overscroll-none">
       <div className="w-1/2 relative bg-white overflow-hidden">
-        <div className="absolute top-[20px] left-15px]">
+        <div className="absolute top-[15px] left-15px]">
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[1px]">
             {data.companyName}
           </div>
