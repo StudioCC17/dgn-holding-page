@@ -1,5 +1,3 @@
-'use client'
-import { useState, useEffect } from 'react'
 import { client, urlFor } from '@/lib/sanity'
 import Image from 'next/image'
 
@@ -19,47 +17,35 @@ interface HoldingPageData {
   backgroundImages: SanityImage[]
 }
 
+async function getHoldingPageData(): Promise<HoldingPageData | null> {
+  try {
+    const data = await client.fetch(`
+      *[_type == "holdingPage"][0]{
+        companyName,
+        address,
+        email,
+        instagram,
+        backgroundImages
+      }
+    `, {}, { next: { revalidate: 0 } })
+    return data
+  } catch (error) {
+    console.error('Error fetching holding page data:', error)
+    return null
+  }
+}
+
 function getRandomImage(images: SanityImage[]): SanityImage | null {
   if (!images || images.length === 0) return null
   return images[Math.floor(Math.random() * images.length)]
 }
 
-export default function Home() {
-  const [data, setData] = useState<HoldingPageData | null>(null)
-  const [currentImage, setCurrentImage] = useState<SanityImage | null>(null)
-  const [loading, setLoading] = useState(true)
+export default async function Home() {
+  const data = await getHoldingPageData()
+  
+  if (!data) return null
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await client.fetch(`
-          *[_type == "holdingPage"][0]{
-            companyName,
-            address,
-            email,
-            instagram,
-            backgroundImages
-          }
-        `)
-        setData(result)
-        if (result?.backgroundImages) {
-          setCurrentImage(getRandomImage(result.backgroundImages))
-        }
-      } catch (error) {
-        console.error('Error fetching holding page data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
-
-  if (loading || !data) {
-    return <div className="h-screen flex items-center justify-center bg-white">
-      <p className="text-black text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">Loading...</p>
-    </div>
-  }
+  const randomImage = getRandomImage(data.backgroundImages)
 
   return (
     <div className="h-screen flex bg-white overflow-hidden overscroll-none">
@@ -100,16 +86,16 @@ export default function Home() {
       
       <div className="w-1/2 relative overflow-hidden bg-white p-[10%]">
         <div className="w-full h-full relative">
-        {currentImage && (
-  <Image
-    src={urlFor(currentImage).quality(95).url()}
-    alt="Background"
-    fill
-    sizes="40vw"
-    className="object-cover"
-    priority
-  />
-)}
+          {randomImage && (
+            <Image
+              src={urlFor(randomImage).quality(95).url()}
+              alt="Background"
+              fill
+              sizes="40vw"
+              className="object-cover"
+              priority
+            />
+          )}
         </div>
       </div>
     </div>
