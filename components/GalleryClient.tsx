@@ -13,7 +13,6 @@ interface SanityImage {
 
 export default function GalleryClient({ images }: { images: SanityImage[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isHovering, setIsHovering] = useState(false)
   const [hoverSide, setHoverSide] = useState<'left' | 'right' | null>(null)
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -50,12 +49,14 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
       
       <div 
         className="w-full h-full relative"
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => {
-          setIsHovering(false)
-          setHoverSide(null)
-        }}
+        onMouseLeave={() => setHoverSide(null)}
         onMouseMove={handleMouseMove}
+        style={{
+          cursor: !showNavigation ? 'default' : 
+                  hoverSide === 'left' ? 'url("data:text/plain;charset=utf-8,←") 16 16, auto' :
+                  hoverSide === 'right' ? 'url("data:text/plain;charset=utf-8,→") 16 16, auto' :
+                  'default'
+        }}
       >
         {currentImage && (
           <Image
@@ -68,29 +69,17 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
           />
         )}
         
-        {showNavigation && isHovering && (
+        {/* Invisible click areas */}
+        {showNavigation && (
           <>
             <div 
-              className="absolute left-0 top-0 w-1/2 h-full flex items-center justify-center cursor-pointer z-20"
+              className="absolute left-0 top-0 w-1/2 h-full z-20"
               onClick={() => handleClick('left')}
-            >
-              {hoverSide === 'left' && (
-                <span className="text-[24px] text-white font-smooth bg-black bg-opacity-50 rounded-full w-12 h-12 flex items-center justify-center">
-                  ←
-                </span>
-              )}
-            </div>
-            
+            />
             <div 
-              className="absolute right-0 top-0 w-1/2 h-full flex items-center justify-center cursor-pointer z-20"
+              className="absolute right-0 top-0 w-1/2 h-full z-20"
               onClick={() => handleClick('right')}
-            >
-              {hoverSide === 'right' && (
-                <span className="text-[24px] text-white font-smooth bg-black bg-opacity-50 rounded-full w-12 h-12 flex items-center justify-center">
-                  →
-                </span>
-              )}
-            </div>
+            />
           </>
         )}
       </div>
