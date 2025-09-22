@@ -1,4 +1,48 @@
-// ... keep all the existing imports and functions ...
+import { client } from '@/lib/sanity'
+import GalleryClient from '@/components/GalleryClient'
+
+interface SanityImage {
+  _type: 'image'
+  asset: {
+    _ref: string
+    _type: 'reference'
+  }
+}
+
+interface HoldingPageData {
+  companyName: string
+  address: string
+  email: string
+  instagram: string
+  backgroundImages: SanityImage[]
+}
+
+async function getHoldingPageData(): Promise<HoldingPageData | null> {
+  try {
+    const data = await client.fetch(`
+      *[_type == "holdingPage"][0]{
+        companyName,
+        address,
+        email,
+        instagram,
+        backgroundImages
+      }
+    `, {}, { next: { revalidate: 0 } })
+    return data
+  } catch (error) {
+    console.error('Error fetching holding page data:', error)
+    return null
+  }
+}
+
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
 
 export default async function Home() {
   const data = await getHoldingPageData()
