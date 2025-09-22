@@ -14,12 +14,24 @@ interface SanityImage {
 export default function GalleryClient({ images }: { images: SanityImage[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [hoverSide, setHoverSide] = useState<'left' | 'right' | null>(null)
+  const [imagesLoaded, setImagesLoaded] = useState<{ [key: number]: boolean }>({})
 
-  // Preload all images
+  // Aggressive preloading with load tracking
   useEffect(() => {
-    images.forEach((image) => {
-      const img = new window.Image()
-      img.src = urlFor(image).quality(95).url()
+    const loadPromises = images.map((image, index) => {
+      return new Promise<void>((resolve) => {
+        const img = new window.Image()
+        img.onload = () => {
+          setImagesLoaded(prev => ({ ...prev, [index]: true }))
+          resolve()
+        }
+        img.onerror = () => resolve() // Still resolve on error to prevent hanging
+        img.src = urlFor(image).quality(95).url()
+      })
+    })
+
+    Promise.all(loadPromises).then(() => {
+      console.log('All images preloaded')
     })
   }, [images])
 
@@ -47,18 +59,29 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
 
   return (
     <div className="w-1/2 relative overflow-hidden bg-white p-[10%]">
-      {/* Preload hidden images */}
-      <div style={{ display: 'none' }}>
-        {images.map((image, index) => (
+      {/* Render ALL images, but only show the current one */}
+      {images.map((image, index) => (
+        <div 
+          key={index}
+          className="w-full h-full relative"
+          style={{ 
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            opacity: index === currentIndex ? 1 : 0,
+            transition: 'opacity 0.1s ease-in-out'
+          }}
+        >
           <Image
-            key={index}
             src={urlFor(image).quality(95).url()}
-            alt="Preload"
-            width={100}
-            height={100}
+            alt="Background"
+            fill
+            sizes="40vw"
+            className="object-cover"
+            priority={index <= 2} // Priority for first 3 images
           />
-        ))}
-      </div>
+        </div>
+      ))}
 
       {showNavigation && (
         <div className="absolute top-[25px] right-[25px] z-10">
@@ -69,34 +92,22 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
       )}
       
       <div 
-        className="w-full h-full relative"
+        className="absolute inset-0 w-full h-full z-20"
         onMouseLeave={() => setHoverSide(null)}
         onMouseMove={handleMouseMove}
       >
-        {currentImage && (
-          <Image
-            key={currentIndex}
-            src={urlFor(currentImage).quality(95).url()}
-            alt="Background"
-            fill
-            sizes="40vw"
-            className="object-cover"
-            priority
-          />
-        )}
-        
         {/* Click areas with custom cursors */}
         {showNavigation && (
           <>
             <div 
-              className="absolute left-0 top-0 w-1/2 h-full z-20"
+              className="absolute left-0 top-0 w-1/2 h-full"
               style={{ 
                 cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'25\' height=\'25\' viewBox=\'0 0 25 25\'><text x=\'12.5\' y=\'18\' text-anchor=\'middle\' font-family=\'ABC Arizona Mix, Arial\' font-size=\'20\' fill=\'black\'>←</text></svg>") 12 12, auto'
               }}
               onClick={() => handleClick('left')}
             />
             <div 
-              className="absolute right-0 top-0 w-1/2 h-full z-20"
+              className="absolute right-0 top-0 w-1/2 h-full"
               style={{ 
                 cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'25\' height=\'25\' viewBox=\'0 0 25 25\'><text x=\'12.5\' y=\'18\' text-anchor=\'middle\' font-family=\'ABC Arizona Mix, Arial\' font-size=\'20\' fill=\'black\'>→</text></svg>") 12 12, auto'
               }}
