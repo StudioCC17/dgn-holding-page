@@ -1,48 +1,4 @@
-import { client } from '@/lib/sanity'
-import GalleryClient from '@/components/GalleryClient'
-
-interface SanityImage {
-  _type: 'image'
-  asset: {
-    _ref: string
-    _type: 'reference'
-  }
-}
-
-interface HoldingPageData {
-  companyName: string
-  address: string
-  email: string
-  instagram: string
-  backgroundImages: SanityImage[]
-}
-
-async function getHoldingPageData(): Promise<HoldingPageData | null> {
-  try {
-    const data = await client.fetch(`
-      *[_type == "holdingPage"][0]{
-        companyName,
-        address,
-        email,
-        instagram,
-        backgroundImages
-      }
-    `, {}, { next: { revalidate: 0 } })
-    return data
-  } catch (error) {
-    console.error('Error fetching holding page data:', error)
-    return null
-  }
-}
-
-function shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
-}
+// ... keep all the existing imports and functions ...
 
 export default async function Home() {
   const data = await getHoldingPageData()
@@ -54,7 +10,7 @@ export default async function Home() {
   return (
     <div className="h-screen flex bg-white overflow-hidden overscroll-none">
       <div className="w-1/2 relative bg-white overflow-hidden">
-        <div className="absolute top-[25px] left-[25px]">
+        <div className="absolute top-[25px] left-[20px]">
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[1px]">
             {data.companyName}
           </div>

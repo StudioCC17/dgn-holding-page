@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { urlFor } from '@/lib/sanity'
 
@@ -14,6 +14,14 @@ interface SanityImage {
 export default function GalleryClient({ images }: { images: SanityImage[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [hoverSide, setHoverSide] = useState<'left' | 'right' | null>(null)
+
+  // Preload all images
+  useEffect(() => {
+    images.forEach((image) => {
+      const img = new window.Image()
+      img.src = urlFor(image).quality(95).url()
+    })
+  }, [images])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (images.length <= 1) return
@@ -39,6 +47,19 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
 
   return (
     <div className="w-1/2 relative overflow-hidden bg-white p-[10%]">
+      {/* Preload hidden images */}
+      <div style={{ display: 'none' }}>
+        {images.map((image, index) => (
+          <Image
+            key={index}
+            src={urlFor(image).quality(95).url()}
+            alt="Preload"
+            width={100}
+            height={100}
+          />
+        ))}
+      </div>
+
       {showNavigation && (
         <div className="absolute top-[25px] right-[25px] z-10">
           <span className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
@@ -54,7 +75,7 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
       >
         {currentImage && (
           <Image
-            key={currentIndex} // Force re-render on index change
+            key={currentIndex}
             src={urlFor(currentImage).quality(95).url()}
             alt="Background"
             fill
@@ -70,14 +91,14 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
             <div 
               className="absolute left-0 top-0 w-1/2 h-full z-20"
               style={{ 
-                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'><text x=\'10\' y=\'15\' text-anchor=\'middle\' font-family=\'ABC Arizona Mix, Arial\' font-size=\'16\' fill=\'black\'>←</text></svg>") 10 10, auto'
+                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'25\' height=\'25\' viewBox=\'0 0 25 25\'><text x=\'12.5\' y=\'18\' text-anchor=\'middle\' font-family=\'ABC Arizona Mix, Arial\' font-size=\'20\' fill=\'black\'>←</text></svg>") 12 12, auto'
               }}
               onClick={() => handleClick('left')}
             />
             <div 
               className="absolute right-0 top-0 w-1/2 h-full z-20"
               style={{ 
-                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'><text x=\'10\' y=\'15\' text-anchor=\'middle\' font-family=\'ABC Arizona Mix, Arial\' font-size=\'16\' fill=\'black\'>→</text></svg>") 10 10, auto'
+                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'25\' height=\'25\' viewBox=\'0 0 25 25\'><text x=\'12.5\' y=\'18\' text-anchor=\'middle\' font-family=\'ABC Arizona Mix, Arial\' font-size=\'20\' fill=\'black\'>→</text></svg>") 12 12, auto'
               }}
               onClick={() => handleClick('right')}
             />
