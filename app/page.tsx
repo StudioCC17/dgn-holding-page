@@ -1,7 +1,5 @@
-'use client'
-import { useState, useEffect } from 'react'
 import { client, urlFor } from '@/lib/sanity'
-import Image from 'next/image'
+import GalleryClient from '@/components/GalleryClient'
 
 interface SanityImage {
   _type: 'image'
@@ -19,64 +17,39 @@ interface HoldingPageData {
   backgroundImages: SanityImage[]
 }
 
-export default function Home() {
-  const [data, setData] = useState<HoldingPageData | null>(null)
-  const [images, setImages] = useState<SanityImage[]>([])
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isHovering, setIsHovering] = useState(false)
-  const [hoverSide, setHoverSide] = useState<'left' | 'right' | null>(null)
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await client.fetch(`
-          *[_type == "holdingPage"][0]{
-            companyName,
-            address,
-            email,
-            instagram,
-            backgroundImages
-          }
-        `)
-        
-        if (result?.backgroundImages) {
-          // Randomize the order of images
-          const shuffled = [...result.backgroundImages].sort(() => Math.random() - 0.5)
-          setImages(shuffled)
-        }
-        
-        setData(result)
-      } catch (error) {
-        console.error('Error fetching data:', error)
+async function getHoldingPageData(): Promise<HoldingPageData | null> {
+  try {
+    const data = await client.fetch(`
+      *[_type == "holdingPage"][0]{
+        companyName,
+        address,
+        email,
+        instagram,
+        backgroundImages
       }
-    }
-
-    fetchData()
-  }, [])
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (images.length <= 1) return
-    
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const isLeftSide = x < rect.width / 2
-    setHoverSide(isLeftSide ? 'left' : 'right')
+    `, {}, { next: { revalidate: 0 } })
+    return data
+  } catch (error) {
+    console.error('Error fetching holding page data:', error)
+    return null
   }
+}
 
-  const handleClick = (direction: 'left' | 'right') => {
-    if (images.length <= 1) return
-    
-    if (direction === 'left') {
-      setCurrentIndex((prev) => prev === 0 ? images.length - 1 : prev - 1)
-    } else {
-      setCurrentIndex((prev) => prev === images.length - 1 ? 0 : prev + 1)
-    }
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
   }
+  return shuffled
+}
 
-  if (!data || images.length === 0) return null
+export default async function Home() {
+  const data = await getHoldingPageData()
+  
+  if (!data) return null
 
-  const currentImage = images[currentIndex]
-  const showNavigation = images.length > 1
+  const shuffledImages = data.backgroundImages ? shuffleArray(data.backgroundImages) : []
 
   return (
     <div className="h-screen flex bg-white overflow-hidden overscroll-none">
@@ -115,69 +88,7 @@ export default function Home() {
         </div>
       </div>
       
-      <div className="w-1/2 relative overflow-hidden bg-white p-[10%]">
-        {/* Counter */}
-        {showNavigation && (
-          <div className="absolute top-[25px] right-[25px] z-10">
-            <span className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
-              {currentIndex + 1}/{images.length}
-            </span>
-          </div>
-        )}
-        
-        {/* Image Container */}
-        <div 
-          className="w-full h-full relative"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => {
-            setIsHovering(false)
-            setHoverSide(null)
-          }}
-          onMouseMove={handleMouseMove}
-        >
-          {currentImage && (
-            <Image
-              src={urlFor(currentImage).width(1600).quality(85).url()}
-              alt="Background"
-              fill
-              sizes="40vw"
-              className="object-cover transition-opacity duration-300"
-              priority
-            />
-          )}
-          
-          {/* Navigation Areas */}
-          {showNavigation && isHovering && (
-            <>
-              {/* Left Navigation */}
-              <div 
-                className="absolute left-0 top-0 w-1/2 h-full flex items-center justify-center cursor-pointer z-20"
-                onClick={() => handleClick('left')}
-                style={{ cursor: hoverSide === 'left' ? 'pointer' : 'default' }}
-              >
-                {hoverSide === 'left' && (
-                  <span className="text-[24px] text-white font-smooth bg-black bg-opacity-50 rounded-full w-12 h-12 flex items-center justify-center">
-                    ←
-                  </span>
-                )}
-              </div>
-              
-              {/* Right Navigation */}
-              <div 
-                className="absolute right-0 top-0 w-1/2 h-full flex items-center justify-center cursor-pointer z-20"
-                onClick={() => handleClick('right')}
-                style={{ cursor: hoverSide === 'right' ? 'pointer' : 'default' }}
-              >
-                {hoverSide === 'right' && (
-                  <span className="text-[24px] text-white font-smooth bg-black bg-opacity-50 rounded-full w-12 h-12 flex items-center justify-center">
-                    →
-                  </span>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+      <GalleryClient images={shuffledImages} />
     </div>
   )
 }
