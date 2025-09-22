@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { client, urlFor } from '@/lib/sanity'
 import Image from 'next/image'
-import { getPlaiceholder } from 'plaiceholder'
 
 interface SanityImage {
   _type: 'image'
@@ -24,7 +23,6 @@ export default function Home() {
   const [data, setData] = useState<HoldingPageData | null>(null)
   const [images, setImages] = useState<SanityImage[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [blurDataURL, setBlurDataURL] = useState('')
   const [isHovering, setIsHovering] = useState(false)
   const [hoverSide, setHoverSide] = useState<'left' | 'right' | null>(null)
 
@@ -45,18 +43,6 @@ export default function Home() {
           // Randomize the order of images
           const shuffled = [...result.backgroundImages].sort(() => Math.random() - 0.5)
           setImages(shuffled)
-          
-          // Generate blur placeholder for first image
-          try {
-            const imageUrl = urlFor(shuffled[0]).width(20).quality(20).url()
-            const buffer = await fetch(imageUrl).then(async (res) =>
-              Buffer.from(await res.arrayBuffer())
-            )
-            const { base64 } = await getPlaiceholder(buffer)
-            setBlurDataURL(base64)
-          } catch (error) {
-            console.error('Error generating blur placeholder:', error)
-          }
         }
         
         setData(result)
@@ -157,8 +143,6 @@ export default function Home() {
               sizes="40vw"
               className="object-cover transition-opacity duration-300"
               priority
-              placeholder="blur"
-              blurDataURL={blurDataURL}
             />
           )}
           
