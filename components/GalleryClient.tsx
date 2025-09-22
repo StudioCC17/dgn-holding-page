@@ -54,6 +54,7 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
       >
         {currentImage && (
           <Image
+            key={currentIndex} // Force re-render on index change
             src={urlFor(currentImage).quality(95).url()}
             alt="Background"
             fill
@@ -69,15 +70,16 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
             <div 
               className="absolute left-0 top-0 w-1/2 h-full z-20"
               style={{ 
-                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'><text x=\'10\' y=\'15\' text-anchor=\'middle\' font-family=\'Arial\' font-size=\'16\' fill=\'black\'>←</text></svg>") 10 10, auto'
+                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'><text x=\'10\' y=\'15\' text-anchor=\'middle\' font-family=\'ABC Arizona Mix, Arial\' font-size=\'16\' fill=\'black\'>←</text></svg>") 10 10, auto'
               }}
               onClick={() => handleClick('left')}
             />
             <div 
               className="absolute right-0 top-0 w-1/2 h-full z-20"
               style={{ 
-                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'><text x=\'10\' y=\'15\' text-anchor=\'middle\' font-family=\'Arial\' font-size=\'16\' fill=\'black\'>→</text></svg>") 10 10, auto'
+                cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'><text x=\'10\' y=\'15\' text-anchor=\'middle\' font-family=\'ABC Arizona Mix, Arial\' font-size=\'16\' fill=\'black\'>→</text></svg>") 10 10, auto'
               }}
+              onClick={() => handleClick('right')}
             />
           </>
         )}
