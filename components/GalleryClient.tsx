@@ -68,8 +68,7 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
             position: 'absolute',
             top: 0,
             left: 0,
-            opacity: index === currentIndex ? 1 : 0,
-            transition: 'opacity 0.1s ease-in-out'
+            opacity: index === currentIndex ? 1 : 0
           }}
         >
           <Image
