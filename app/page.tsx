@@ -1,7 +1,23 @@
 import { client, urlFor } from '@/lib/sanity'
 import Image from 'next/image'
 
-async function getHoldingPageData() {
+interface SanityImage {
+  _type: 'image'
+  asset: {
+    _ref: string
+    _type: 'reference'
+  }
+}
+
+interface HoldingPageData {
+  companyName: string
+  address: string
+  email: string
+  instagram: string
+  backgroundImages: SanityImage[]
+}
+
+async function getHoldingPageData(): Promise<HoldingPageData | null> {
   try {
     const data = await client.fetch(`
       *[_type == "holdingPage"][0]{
@@ -19,7 +35,7 @@ async function getHoldingPageData() {
   }
 }
 
-function getRandomImage(images: any[]) {
+function getRandomImage(images: SanityImage[]): SanityImage | null {
   if (!images || images.length === 0) return null
   return images[Math.floor(Math.random() * images.length)]
 }
@@ -37,7 +53,6 @@ export default async function Home() {
 
   return (
     <div className="h-screen flex bg-white overflow-hidden overscroll-none">
-      {/* Left side - Text content positioned 25px from top and left */}
       <div className="w-1/2 relative bg-white overflow-hidden">
         <div className="absolute top-[25px] left-[25px]">
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[1px]">
@@ -73,7 +88,6 @@ export default async function Home() {
         </div>
       </div>
       
-      {/* Right side - High resolution portrait image with 10% padding */}
       <div className="w-1/2 relative overflow-hidden bg-white p-[10%]">
         <div className="w-full h-full relative">
           {randomImage && (
