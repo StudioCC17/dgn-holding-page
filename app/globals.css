@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'ABC Arizona Mix';
+  src: url('/fonts/ABCArizonaMix-Regular-Trial.woff2') format('woff2'),
+       url('/fonts/ABCArizonaMix-Regular-Trial.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -19,8 +27,52 @@
   }
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+}
+
+html {
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  color: #000000;
+  font-family: 'ABC Arizona Mix', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+.font-smooth {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Disable pull-to-refresh and elastic scrolling */
+body {
+  -webkit-overflow-scrolling: auto;
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+}
+
+/* Prevent any scrolling on the document */
+html, body {
+  scroll-behavior: auto !important;
 }
