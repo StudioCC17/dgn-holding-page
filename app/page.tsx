@@ -88,13 +88,15 @@ export default async function Home() {
         <div className="w-full h-full relative">
           {randomImage && (
             <Image
-              src={urlFor(randomImage).quality(95).url()}
-              alt="Background"
-              fill
-              sizes="40vw"
-              className="object-cover"
-              priority
-            />
+            src={urlFor(randomImage).width(1600).quality(85).url()}
+            alt="Background"
+            fill
+            sizes="40vw"
+            className="object-cover"
+            priority
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyb5bt/ATqt+igKcFabFUMLSeGhM="
+          />
           )}
         </div>
       </div>
