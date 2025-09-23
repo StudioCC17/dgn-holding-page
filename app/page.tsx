@@ -1,4 +1,6 @@
 import { client } from '@/lib/sanity'
+import { urlFor } from '@/lib/sanity'
+import Image from 'next/image'
 import GalleryClient from '@/components/GalleryClient'
 
 interface SanityImage {
@@ -11,9 +13,14 @@ interface SanityImage {
 
 interface HoldingPageData {
   companyName: string
+  subHeader: string
   address: string
+  phone1: string
+  phone2: string
   email: string
   instagram: string
+  ribaInfo: string
+  ribaLogo: SanityImage
   backgroundImages: SanityImage[]
 }
 
@@ -22,9 +29,14 @@ async function getHoldingPageData(): Promise<HoldingPageData | null> {
     const data = await client.fetch(`
       *[_type == "holdingPage"][0]{
         companyName,
+        subHeader,
         address,
+        phone1,
+        phone2,
         email,
         instagram,
+        ribaInfo,
+        ribaLogo,
         backgroundImages
       }
     `, {}, { next: { revalidate: 0 } })
@@ -54,19 +66,45 @@ export default async function Home() {
   return (
     <div className="h-screen flex bg-white overflow-hidden overscroll-none">
       <div className="w-1/2 relative bg-white overflow-hidden">
-        <div className="absolute top-[15px] left-[15px]">
+        <div className="absolute top-[25px] left-[20px]">
+          {/* Company Name */}
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[1px]">
             {data.companyName}
           </div>
+          
+          {/* Sub Header */}
+          {data.subHeader && (
+            <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
+              {data.subHeader}
+            </div>
+          )}
+          
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
             &nbsp;
           </div>
+          
+          {/* Address */}
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] whitespace-pre-line">
             {data.address}
           </div>
+          
+          {/* Phone Numbers */}
+          {data.phone1 && (
+            <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
+              {data.phone1}
+            </div>
+          )}
+          {data.phone2 && (
+            <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
+              {data.phone2}
+            </div>
+          )}
+          
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
             &nbsp;
           </div>
+          
+          {/* Email */}
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
             <a 
               href={`mailto:${data.email}`}
@@ -75,6 +113,8 @@ export default async function Home() {
               {data.email}
             </a>
           </div>
+          
+          {/* Instagram */}
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
             <a 
               href={`https://instagram.com/${data.instagram}`}
@@ -85,6 +125,30 @@ export default async function Home() {
               @{data.instagram}
             </a>
           </div>
+          
+          <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
+            &nbsp;
+          </div>
+          
+          {/* RIBA Info */}
+          {data.ribaInfo && (
+            <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] whitespace-pre-line">
+              {data.ribaInfo}
+            </div>
+          )}
+          
+          {/* RIBA Logo */}
+          {data.ribaLogo && (
+            <div className="mt-2">
+              <Image
+                src={urlFor(data.ribaLogo).width(100).quality(95).url()}
+                alt="RIBA Logo"
+                width={100}
+                height={50}
+                className="object-contain"
+              />
+            </div>
+          )}
         </div>
       </div>
       
