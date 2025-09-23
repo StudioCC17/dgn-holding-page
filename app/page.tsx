@@ -74,9 +74,14 @@ export default async function Home() {
           
           {/* Sub Header */}
           {data.subHeader && (
-            <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] mt-1">
-              {data.subHeader}
-            </div>
+            <>
+              <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
+                &nbsp;
+              </div>
+              <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
+                {data.subHeader}
+              </div>
+            </>
           )}
           
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
@@ -89,8 +94,13 @@ export default async function Home() {
           </div>
           
           {/* Phone Numbers */}
+          {(data.phone1 || data.phone2) && (
+            <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
+              &nbsp;
+            </div>
+          )}
           {data.phone1 && (
-            <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] mt-1">
+            <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
               {data.phone1}
             </div>
           )}
