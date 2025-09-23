@@ -66,6 +66,7 @@ export default async function Home() {
   return (
     <div className="h-screen flex bg-white overflow-hidden overscroll-none">
       <div className="w-1/2 relative bg-white overflow-hidden">
+        {/* Main content - top aligned */}
         <div className="absolute top-[25px] left-[20px]">
           {/* Company Name */}
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[1px]">
@@ -135,31 +136,32 @@ export default async function Home() {
               @{data.instagram}
             </a>
           </div>
-          
-          <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
-            &nbsp;
-          </div>
-          
-          {/* RIBA Info */}
-          {data.ribaInfo && (
-            <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] whitespace-pre-line">
-              {data.ribaInfo}
-            </div>
-          )}
-          
-          {/* RIBA Logo */}
-          {data.ribaLogo && (
-            <div className="mt-2">
-              <Image
-                src={urlFor(data.ribaLogo).width(100).quality(95).url()}
-                alt="RIBA Logo"
-                width={100}
-                height={50}
-                className="object-contain"
-              />
-            </div>
-          )}
         </div>
+
+        {/* RIBA section - bottom aligned */}
+        {(data.ribaInfo || data.ribaLogo) && (
+          <div className="absolute bottom-[25px] left-[20px]">
+            {/* RIBA Info */}
+            {data.ribaInfo && (
+              <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] whitespace-pre-line">
+                {data.ribaInfo}
+              </div>
+            )}
+            
+            {/* RIBA Logo */}
+            {data.ribaLogo && (
+              <div className="mt-2">
+                <Image
+                  src={urlFor(data.ribaLogo).width(100).quality(95).url()}
+                  alt="RIBA Logo"
+                  width={100}
+                  height={50}
+                  className="object-contain"
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
       
       <GalleryClient images={shuffledImages} />
