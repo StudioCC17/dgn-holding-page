@@ -67,7 +67,7 @@ export default async function Home() {
     <div className="h-screen flex flex-col md:flex-row bg-white overflow-hidden overscroll-none">
       {/* Mobile: Full screen gallery with text overlay */}
       <div className="md:hidden relative w-full h-full">
-        <GalleryClient images={shuffledImages} />
+        <GalleryClient images={shuffledImages} isMobile={true} />
         
         {/* Text overlay on mobile */}
         <div className="absolute top-[15px] left-[20px] z-30 text-white">
@@ -124,7 +124,7 @@ export default async function Home() {
               href={`mailto:${data.email}`}
               className="transition-all duration-200 no-underline hover:no-underline text-white"
             >
-              {data.email}
+              Email
             </a>
           </div>
           
@@ -142,27 +142,35 @@ export default async function Home() {
 
           {/* RIBA section on mobile */}
           {(data.ribaInfo || data.ribaLogo) && (
-            <div className="mt-6">
-              {/* RIBA Info */}
-              {data.ribaInfo && (
-                <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px] whitespace-pre-line">
-                  {data.ribaInfo}
-                </div>
-              )}
-              
-              {/* RIBA Logo */}
-              {data.ribaLogo && (
-                <div className="mt-2">
-                  <Image
-                    src={urlFor(data.ribaLogo).width(100).quality(95).url()}
-                    alt="RIBA Logo"
-                    width={100}
-                    height={50}
-                    className="object-contain"
-                  />
-                </div>
-              )}
-            </div>
+            <>
+              <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+                &nbsp;
+              </div>
+              <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+                &nbsp;
+              </div>
+              <div>
+                {/* RIBA Info */}
+                {data.ribaInfo && (
+                  <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px] whitespace-pre-line">
+                    {data.ribaInfo}
+                  </div>
+                )}
+                
+                {/* RIBA Logo */}
+                {data.ribaLogo && (
+                  <div className="mt-2">
+                    <Image
+                      src={urlFor(data.ribaLogo).width(100).quality(95).url()}
+                      alt="RIBA Logo"
+                      width={100}
+                      height={50}
+                      className="object-contain"
+                    />
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </div>
       </div>
@@ -224,7 +232,7 @@ export default async function Home() {
               href={`mailto:${data.email}`}
               className="transition-all duration-200 no-underline hover:no-underline"
             >
-              {data.email}
+              Email
             </a>
           </div>
           
@@ -268,7 +276,7 @@ export default async function Home() {
       </div>
       
       <div className="hidden md:block w-1/2">
-        <GalleryClient images={shuffledImages} />
+        <GalleryClient images={shuffledImages} isMobile={false} />
       </div>
     </div>
   )

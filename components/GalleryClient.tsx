@@ -11,7 +11,7 @@ interface SanityImage {
   }
 }
 
-export default function GalleryClient({ images }: { images: SanityImage[] }) {
+export default function GalleryClient({ images, isMobile = false }: { images: SanityImage[], isMobile?: boolean }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [hoverSide, setHoverSide] = useState<'left' | 'right' | null>(null)
   const [imagesLoaded, setImagesLoaded] = useState<{ [key: number]: boolean }>({})
@@ -84,7 +84,7 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
 
       {showNavigation && (
         <div className="absolute top-[15px] right-[15px] z-10">
-          <span className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px]">
+          <span className={`text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px] ${isMobile ? 'text-white' : 'text-black'}`}>
             {currentIndex + 1}/{images.length}
           </span>
         </div>
