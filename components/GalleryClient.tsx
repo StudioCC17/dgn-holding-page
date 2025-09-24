@@ -58,7 +58,7 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
   const showNavigation = images.length > 1
 
   return (
-    <div className="w-full md:w-1/2 relative overflow-hidden bg-white p-[10%] md:p-[10%] flex-1">
+    <div className="w-full h-full relative overflow-hidden bg-white p-[10%]">
       {/* Render ALL images, but only show the current one */}
       {images.map((image, index) => (
         <div 
@@ -75,7 +75,7 @@ export default function GalleryClient({ images }: { images: SanityImage[] }) {
             src={urlFor(image).quality(95).url()}
             alt="Background"
             fill
-            sizes="(max-width: 768px) 100vw, 40vw"
+            sizes="40vw"
             className="object-cover"
             priority={index <= 2} // Priority for first 3 images
           />

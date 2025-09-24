@@ -65,10 +65,112 @@ export default async function Home() {
 
   return (
     <div className="h-screen flex flex-col md:flex-row bg-white overflow-hidden overscroll-none">
-      {/* Text Section */}
-      <div className="w-full md:w-1/2 relative bg-white overflow-hidden flex-shrink-0">
+      {/* Mobile: Full screen gallery with text overlay */}
+      <div className="md:hidden relative w-full h-full">
+        <GalleryClient images={shuffledImages} />
+        
+        {/* Text overlay on mobile */}
+        <div className="absolute top-[15px] left-[20px] z-30 text-white">
+          {/* Company Name */}
+          <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[1px]">
+            {data.companyName}
+          </div>
+          
+          {/* Sub Header */}
+          {data.subHeader && (
+            <>
+              <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+                &nbsp;
+              </div>
+              <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+                {data.subHeader}
+              </div>
+            </>
+          )}
+          
+          <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+            &nbsp;
+          </div>
+          
+          {/* Address */}
+          <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px] whitespace-pre-line">
+            {data.address}
+          </div>
+          
+          {/* Phone Numbers */}
+          {(data.phone1 || data.phone2) && (
+            <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+              &nbsp;
+            </div>
+          )}
+          {data.phone1 && (
+            <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+              {data.phone1}
+            </div>
+          )}
+          {data.phone2 && (
+            <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+              {data.phone2}
+            </div>
+          )}
+          
+          <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+            &nbsp;
+          </div>
+          
+          {/* Email */}
+          <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+            <a 
+              href={`mailto:${data.email}`}
+              className="transition-all duration-200 no-underline hover:no-underline text-white"
+            >
+              {data.email}
+            </a>
+          </div>
+          
+          {/* Instagram */}
+          <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+            <a 
+              href={`https://instagram.com/${data.instagram}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-all duration-200 no-underline hover:no-underline text-white"
+            >
+              @{data.instagram}
+            </a>
+          </div>
+
+          {/* RIBA section on mobile */}
+          {(data.ribaInfo || data.ribaLogo) && (
+            <div className="mt-6">
+              {/* RIBA Info */}
+              {data.ribaInfo && (
+                <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px] whitespace-pre-line">
+                  {data.ribaInfo}
+                </div>
+              )}
+              
+              {/* RIBA Logo */}
+              {data.ribaLogo && (
+                <div className="mt-2">
+                  <Image
+                    src={urlFor(data.ribaLogo).width(100).quality(95).url()}
+                    alt="RIBA Logo"
+                    width={100}
+                    height={50}
+                    className="object-contain"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Desktop: Original layout */}
+      <div className="hidden md:block w-1/2 relative bg-white overflow-hidden flex-shrink-0">
         {/* Main content */}
-        <div className="absolute top-[15px] left-[20px] md:top-[15px] md:left-[20px]">
+        <div className="absolute top-[15px] left-[20px]">
           {/* Company Name */}
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[1px]">
             {data.companyName}
@@ -137,36 +239,11 @@ export default async function Home() {
               @{data.instagram}
             </a>
           </div>
-
-          {/* RIBA section - Mobile: directly under text, Desktop: bottom aligned */}
-          {(data.ribaInfo || data.ribaLogo) && (
-            <div className="md:hidden mt-6">
-              {/* RIBA Info */}
-              {data.ribaInfo && (
-                <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] whitespace-pre-line">
-                  {data.ribaInfo}
-                </div>
-              )}
-              
-              {/* RIBA Logo */}
-              {data.ribaLogo && (
-                <div className="mt-2">
-                  <Image
-                    src={urlFor(data.ribaLogo).width(100).quality(95).url()}
-                    alt="RIBA Logo"
-                    width={100}
-                    height={50}
-                    className="object-contain"
-                  />
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* RIBA section - Desktop only: bottom aligned */}
         {(data.ribaInfo || data.ribaLogo) && (
-          <div className="hidden md:block absolute bottom-[25px] left-[20px]">
+          <div className="absolute bottom-[25px] left-[20px]">
             {/* RIBA Info */}
             {data.ribaInfo && (
               <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] whitespace-pre-line">
@@ -190,7 +267,9 @@ export default async function Home() {
         )}
       </div>
       
-      <GalleryClient images={shuffledImages} />
+      <div className="hidden md:block w-1/2">
+        <GalleryClient images={shuffledImages} />
+      </div>
     </div>
   )
 }
