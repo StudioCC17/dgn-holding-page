@@ -70,7 +70,7 @@ export default async function Home() {
         <GalleryClient images={shuffledImages} isMobile={true} />
         
         {/* Text overlay on mobile */}
-        <div className="absolute top-[15px] left-[20px] z-30 text-white">
+        <div className="absolute top-[15px] left-[15px] z-30 text-white">
           {/* Company Name */}
           <div className="text-[15.5px] leading-[1.3] font-smooth tracking-[1px]">
             {data.companyName}
@@ -178,7 +178,7 @@ export default async function Home() {
       {/* Desktop: Original layout */}
       <div className="hidden md:block w-1/2 relative bg-white overflow-hidden flex-shrink-0">
         {/* Main content */}
-        <div className="absolute top-[15px] left-[20px]">
+        <div className="absolute top-[15px] left-[15px]">
           {/* Company Name */}
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[1px]">
             {data.companyName}
@@ -251,7 +251,7 @@ export default async function Home() {
 
         {/* RIBA section - Desktop only: bottom aligned */}
         {(data.ribaInfo || data.ribaLogo) && (
-          <div className="absolute bottom-[25px] left-[20px]">
+          <div className="absolute bottom-[25px] left-[15px]">
             {/* RIBA Info */}
             {data.ribaInfo && (
               <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] whitespace-pre-line">

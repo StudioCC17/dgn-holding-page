@@ -83,8 +83,8 @@ export default function GalleryClient({ images, isMobile = false }: { images: Sa
       ))}
 
       {showNavigation && (
-        <div className="absolute top-[15px] right-[15px] z-10">
-          <span className={`text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px] ${isMobile ? 'text-white' : 'text-black'}`}>
+        <div className="absolute top-[15px] right-[15px] z-10 text-[15.5px] leading-[1.3] font-smooth tracking-[0.2px]">
+          <span className={`${isMobile ? 'text-white' : 'text-black'}`}>
             {currentIndex + 1}/{images.length}
           </span>
         </div>
