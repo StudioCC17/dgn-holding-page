@@ -64,10 +64,11 @@ export default async function Home() {
   const shuffledImages = data.backgroundImages ? shuffleArray(data.backgroundImages) : []
 
   return (
-    <div className="h-screen flex bg-white overflow-hidden overscroll-none">
-      <div className="w-1/2 relative bg-white overflow-hidden">
-        {/* Main content - top aligned */}
-        <div className="absolute top-[15px] left-[20px]">
+    <div className="h-screen flex flex-col md:flex-row bg-white overflow-hidden overscroll-none">
+      {/* Text Section */}
+      <div className="w-full md:w-1/2 relative bg-white overflow-hidden flex-shrink-0">
+        {/* Main content */}
+        <div className="absolute top-[15px] left-[20px] md:top-[15px] md:left-[20px]">
           {/* Company Name */}
           <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[1px]">
             {data.companyName}
@@ -136,11 +137,36 @@ export default async function Home() {
               @{data.instagram}
             </a>
           </div>
+
+          {/* RIBA section - Mobile: directly under text, Desktop: bottom aligned */}
+          {(data.ribaInfo || data.ribaLogo) && (
+            <div className="md:hidden mt-6">
+              {/* RIBA Info */}
+              {data.ribaInfo && (
+                <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] whitespace-pre-line">
+                  {data.ribaInfo}
+                </div>
+              )}
+              
+              {/* RIBA Logo */}
+              {data.ribaLogo && (
+                <div className="mt-2">
+                  <Image
+                    src={urlFor(data.ribaLogo).width(100).quality(95).url()}
+                    alt="RIBA Logo"
+                    width={100}
+                    height={50}
+                    className="object-contain"
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* RIBA section - bottom aligned */}
+        {/* RIBA section - Desktop only: bottom aligned */}
         {(data.ribaInfo || data.ribaLogo) && (
-          <div className="absolute bottom-[25px] left-[20px]">
+          <div className="hidden md:block absolute bottom-[25px] left-[20px]">
             {/* RIBA Info */}
             {data.ribaInfo && (
               <div className="text-[15.5px] leading-[1.3] text-black font-smooth tracking-[0.2px] whitespace-pre-line">
