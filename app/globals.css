@@ -2,8 +2,8 @@
 
 @font-face {
   font-family: 'ABC Arizona Mix';
-  src: url('/fonts/ABCArizonaMix-Regular-Trial.woff2') format('woff2'),
-       url('/fonts/ABCArizonaMix-Regular-Trial.woff') format('woff');
+  src: url('/fonts/ABCArizonaMix-Regular.woff2') format('woff2'),
+       url('/fonts/ABCArizonaMix-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }

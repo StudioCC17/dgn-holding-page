@@ -124,7 +124,7 @@ export default async function Home() {
               href={`mailto:${data.email}`}
               className="transition-all duration-200 no-underline hover:no-underline text-white"
             >
-              Email
+              {data.email}
             </a>
           </div>
           
@@ -232,7 +232,7 @@ export default async function Home() {
               href={`mailto:${data.email}`}
               className="transition-all duration-200 no-underline hover:no-underline"
             >
-              Email
+              {data.email}
             </a>
           </div>
           
